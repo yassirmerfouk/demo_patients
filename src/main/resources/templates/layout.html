@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" th:href="@{/bootstrap/bootstrap.min.css}" />
+<title>Patient</title>
+</head>
+<body class="container mt-2">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="#">Navbar</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNavDropdown">
+			<ul class="navbar-nav">
+				<li class="nav-item active">
+					<a class="nav-link" href="#">
+						Home
+						<span class="sr-only">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/patients}">Patients</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Actions </a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" th:href="@{/add}" sec:authorize="hasAuthority('ADMIN')">Add patient</a>
+					</div>
+				</li>
+			</ul>
+			<ul class="navbar-nav" sec:authorize="isAuthenticated()">
+				<li class="nav-item dropdown right">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" sec:authentication="name"></a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" th:href="@{/logout}">Logout</a>
+					</div>
+				</li>
+			</ul>
+			<ul class="navbar-nav" sec:authorize="!isAuthenticated()">
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/login}">
+						Login
+					</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<section layout:fragment="content"></section>
+
+	<script th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+	<script th:src="@{/js/popper.min.js}"></script>
+	<script th:src="@{/bootstrap/bootstrap.min.js}"></script>
+</body>
+</html>

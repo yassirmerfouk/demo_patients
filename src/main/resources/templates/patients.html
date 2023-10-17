@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="card mt-3">
+			<div class="card-header">Patients</div>
+			<div class="card-body">
+				<div th:class="${alert == null ? '' : 'alert alert-success'}" th:text="${alert}"></div>
+				<form class="form-inline" method="GET" th:action="@{/patients}">
+					<div class="form-group mx-sm-3 mb-2">
+						<input type="text" class="form-control" name="name" placeholder="Search" th:value="${searchName}">
+					</div>
+					<button type="submit" class="btn btn-primary mb-2">Search</button>
+				</form>
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">FirstName</th>
+							<th scope="col">LastName</th>
+							<th scope="col">EntryDate</th>
+							<th scope="col">Sick</th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="patient : ${patients}">
+							<th th:text="${patient.id}"></th>
+							<td th:text="${patient.firstName}"></td>
+							<td th:text="${patient.lastName}"></td>
+							<td th:text="${patient.entryDate}"></td>
+							<td th:text="${patient.sick}"></td>
+							<td>
+								<div class="d-flex flex-row">
+									<a class="btn btn-primary mr-1" th:href="@{/update/{id}(id = ${patient.id})}" sec:authorize="hasAuthority('ADMIN')">Update</a>
+									<form method="POST" th:action="@{/delete(name=${searchName}, page=${currentPage}, size=${currentSize})}" sec:authorize="hasAuthority('ADMIN')">
+										<input type="hidden" th:name="id" th:value="${patient.id}">
+										<button onclick="return confirm('Are you sure?')" type="submint" class="btn btn-danger">Delete</button>
+									</form>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<nav aria-label="...">
+					<ul class="pagination">
+						<div th:each="page, status : ${pages}">
+							<li th:class="${status.index == currentPage ? 'page-item active' :  'page-item'}">
+								<a class="page-link" th:href="@{/patients(name=${searchName},page=${status.index}, size=${currentSize})}" th:text="${status.index}"></a>
+							</li>
+						</div>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
